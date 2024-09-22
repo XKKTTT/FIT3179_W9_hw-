@@ -1,0 +1,68 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "A choropleth map of arrivals by country into Malaysia since 2020.",
+  "title": "Total arrivals into Malaysia",
+  "width": 900,
+  "height": 500,
+  "layer": [
+    {
+      "data": {
+        "url": "https://raw.githubusercontent.com/FIT3179/Vega-Lite/main/2_symbol_map/js/ne_110m_admin_0_countries.topojson",
+        "format": {
+          "type": "topojson",
+          "feature": "ne_110m_admin_0_countries"
+        }
+      },
+      "transform": [
+        {
+          "lookup": "properties.ISO_A3",
+          "from": {
+            "data": {
+              "url": "https://raw.githubusercontent.com/XKKTTT/FIT3179_W9_hw-/main/aggregated_arrivals_by_country.csv",
+              "format": {
+                "type": "csv"
+              }
+            },
+            "key": "country",
+            "fields": ["arrivals"]
+          }
+        },
+        {"calculate": "datum.arrivals + 0.1", "as": "arrivals"},
+        {"filter": "datum.arrivals != null"}
+      ],
+      "projection": {
+        "type": "equalEarth"
+      },
+      "mark": "geoshape",
+      "encoding": {
+        "color": {
+          "field": "arrivals",
+          "type": "quantitative",
+          "scale": {
+            "type": "log",
+            "scheme": "blues"
+          }
+        },
+        "tooltip": [
+          {"field": "properties.NAME", "type": "nominal", "title": "Country"},
+          {"field": "arrivals", "type": "quantitative", "title": "Total Arrivals Since 2020"}
+        ]
+      }
+    },
+    {
+      "data": {
+        "graticule": {
+          "step": [30, 30]
+        }
+      },
+      "mark": {
+        "type": "geoshape",
+        "stroke": "lightgray",
+        "strokeWidth": 0.5
+      },
+      "projection": {
+        "type": "equalEarth"
+      }
+    }
+  ]
+}
