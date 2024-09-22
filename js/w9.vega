@@ -36,6 +36,7 @@
       "mark": "geoshape",
       "encoding": {
         "color": {
+          "title": "Number of Arrivals",
           "field": "arrivals",
           "type": "quantitative",
           "scale": {
